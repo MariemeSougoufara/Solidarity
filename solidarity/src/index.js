@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import App from "./scripts/App";
 import FormulaireCagnotte from "./components/FormulaireCagnotte";
 import ResumeCagnotte from "./components/ResumeCagnotte";
-import ListeCagnottes from "./components/ListeCagnottes";
+import CagnotteSuccess from "./components/CagnotteSuccess";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,7 +14,7 @@ ReactDOM.render(
         <Route path="/" element={<FormulaireCagnotte />} />{" "}
         {/* Page principale */}
         <Route path="/ResumeCagnotte" element={<ResumeCagnotte />} />
-        <Route path="/ListeCagnottes" element={<ListeCagnottes />} />
+        <Route path="/CagnotteSuccess" element={<CagnotteSuccess />} />
       </Routes>
     </Router>
   </React.StrictMode>,

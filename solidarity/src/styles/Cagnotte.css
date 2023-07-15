@@ -42,6 +42,10 @@ body {
   border-radius: 20px;
 }
 
+.formulaire-cagnotte button[type="submit"]:hover {
+  background-color: #f8d31e;
+}
+
 .formulaire-cagnotte a {
   text-decoration: none;
   color: #000000;
@@ -144,6 +148,7 @@ button[type="submit"] {
 }
 
 /* Ajoutez d'autres styles selon vos besoins */
+
 .resume-cagnotte {
   position: relative;
   z-index: 1;
@@ -206,7 +211,7 @@ button[type="submit"] {
   position: absolute;
   left: 5px;
   width: 1px;
-  background-color: #fcf598;
+  background-color: #000000;
 }
 
 .resume-cagnotte .button-container {
@@ -252,3 +257,30 @@ button[type="submit"] {
 .resume-cagnotte .button-container .button-retour {
   margin-left: auto;
 }
+
+/* Ajoutez d'autres styles selon vos besoins */
+
+.cagnotte-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  backdrop-filter: blur(5px);
+}
+
+.success-message {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.success-message h2 {
+  font-size: 25px;
+  margin-bottom: 10px;
+}
+
+.success-message p {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+

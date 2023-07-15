@@ -10,7 +10,7 @@ const ResumeCagnotte = () => {
   };
 
   const handleValider = () => {
-    navigate("/ListeCagnottes");
+    navigate("/CagnotteSuccess");
   };
 
   const location = useLocation();
@@ -22,17 +22,20 @@ const ResumeCagnotte = () => {
       <ul>
         <li>Nom de la cagnotte : {formData?.nomCagnotte}</li>
         <li>Objectif initial : {formData?.objectifInitial}</li>
-        <li>Description : {formData?.description}</li>
         <li>Don suggéré : {formData?.donSuggere}</li>
-        <li>Date limite des participations : {formData?.dateLimite}</li>
+        <li>Description : {formData?.description}</li>
         {/* Afficher d'autres données du formulaire */}
       </ul>
       <div className="button-container">
-        <button className="button-valider" type="submit" onClick={handleValider}>
-          Valider
-        </button>
         <button className="button-retour" type="submit" onClick={handleRetour}>
-          Retourner en arrière
+            Annuler
+        </button>
+        <button
+          className="button-valider"
+          type="submit"
+          onClick={handleValider}
+        >
+          Valider
         </button>
       </div>
     </div>

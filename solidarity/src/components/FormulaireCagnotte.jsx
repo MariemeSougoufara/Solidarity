@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
 import DatePicker from "react-datepicker";
 import fr from "date-fns/locale/fr";
@@ -26,100 +26,92 @@ const FormulaireCagnotte = () => {
   const [masquerParticipants, setMasquerParticipants] = useState(false);
   const [notificationsEmail, setNotificationsEmail] = useState(false);
 
+  // Etats pour stocker les erreurs
+  const [nomCagnotteError, setNomCagnotteError] = useState("");
+  const [donSuggereError, setDonSuggereError] = useState("");
+  const [objectifInitialError, setObjectifInitialError] = useState("");
+
+  // Si erreurs, ne pas valider
+  const [isFormValid, setIsFormValid] = useState(false);
+  const location = useLocation();
+  const formData = location.state?.formData || {};
+
+  // Validation avec une regex
+  const handleChangeNomCagnotte = (e) => {
+    const value = e.target.value;
+
+    const regex = /^[A-Za-z\s]*$/; // Lettres et espaces autorisés
+    if (!regex.test(value)) {
+      setNomCagnotteError(
+        "Le nom de la cagnotte doit contenir uniquement des lettres."
+      );
+    } else {
+      setNomCagnotteError("");
+    }
+
+    setNomCagnotte(value);
+    setIsFormValid(!!(nomCagnotteError || donSuggereError || objectifInitial));
+  };
+
+  const handleChangeDonSuggere = (e) => {
+    const value = e.target.value;
+
+    const regex = /^[0-9]*$/; // Chiffres uniquement
+    if (!regex.test(value)) {
+      setDonSuggereError(
+        "Le don suggéré doit contenir uniquement des chiffres."
+      );
+    } else if (parseInt(value) >= parseInt(objectifInitial)) {
+      setDonSuggereError(
+        "Le don suggéré doit être inférieur à l'objectif initial de la cagnotte."
+      );
+    } else {
+      setDonSuggereError("");
+    }
+
+    setDonSuggere(value);
+    setIsFormValid(!!(nomCagnotteError || donSuggereError || objectifInitial));
+  };
+
+  const handleChangeObjectifInitial = (e) => {
+    const value = e.target.value;
+
+    const regex = /^[0-9]*$/; // Chiffres uniquement
+    if (!regex.test(value)) {
+      setObjectifInitialError(
+        "L'objectif initial de la cagnotte doit contenir uniquement des chiffres."
+      );
+    } else {
+      setObjectifInitialError("");
+    }
+
+    setObjectifInitial(value);
+    setIsFormValid(!!(nomCagnotteError || donSuggereError || objectifInitial));
+  };
+  // Fin Validation avec une regex
+
   const handleOuvrirCagnotte = () => {
-    // Récupérer les données du formulaire
-    const formData = {
-      nomCagnotte,
-      objectifInitial,
-      description,
-      donSuggere,
-      dateLimite,
-      masquerMontantGlobal,
-      masquerParticipations,
-      masquerParticipants,
-      notificationsEmail,
-    };
-    navigate("/ResumeCagnotte", { state: { formData } });
-  };
+    const selectedDate = dateLimite ? new Date(dateLimite) : null;
 
-  /*
-  // Gestionnaires de changement pour mettre à jour les états des champs
-  const handleChange = (input) => (event) => {
-    switch (input) {
-      case "nomCagnotte":
-        setNomCagnotte(event.target.value);
-        break;
-      case "objectifInitial":
-        setObjectifInitial(event.target.value);
-        break;
-      case "description":
-        setDescription(event.target.value);
-        break;
-      case "donSuggere":
-        setDonSuggere(event.target.value);
-        break;
-      case "dateLimite":
-        setDateLimite(event.target.value);
-        break;
-      case "masquerMontantGlobal":
-        setMasquerMontantGlobal(event.target.checked);
-        break;
-      case "masquerParticipations":
-        setMasquerParticipations(event.target.checked);
-        break;
-      case "masquerParticipants":
-        setMasquerParticipants(event.target.checked);
-        break;
-      case "notificationsEmail":
-        setNotificationsEmail(event.target.checked);
-        break;
-      default:
-        break;
+    // Vérification de la validité du formulaire avant de soumettre
+    if (!nomCagnotteError && !donSuggereError && !objectifInitialError) {
+      // Récupérer les données du formulaire
+      const formData = {
+        nomCagnotte,
+        objectifInitial,
+        description,
+        donSuggere,
+        masquerMontantGlobal,
+        masquerParticipations,
+        masquerParticipants,
+        notificationsEmail,
+      };
+
+      // Soumission du formulaire
+      navigate("/ResumeCagnotte", { state: { formData } });
     }
   };
 
-  const handleClickOuvrirCagnotte = () => {
-    // Effectuer les vérifications ici
-    const newErrors = {};
-    // Vérification pour le nom de la cagnotte (uniquement des lettres)
-    if (!/^[A-Za-z]+$/.test(nomCagnotte)) {
-      newErrors.nomCagnotte =
-        "Le nom de la cagnotte doit contenir uniquement des lettres.";
-    }
-
-    // Vérification pour l'objectif initial de la cagnotte (uniquement des chiffres)
-    if (!/^[0-9]+$/.test(objectifInitial)) {
-      newErrors.objectifInitial =
-        "L'objectif initial de la cagnotte doit contenir uniquement des chiffres.";
-    }
-
-    // Vérification pour le don suggéré (uniquement des chiffres et inférieur à l'objectif initial)
-    if (!/^[0-9]+$/.test(donSuggere)) {
-      newErrors.donSuggere =
-        "Le don suggéré doit contenir uniquement des chiffres.";
-    } else if (parseInt(donSuggere) >= parseInt(objectifInitial)) {
-      newErrors.donSuggere =
-        "Le don suggéré doit être inférieur à l'objectif initial de la cagnotte.";
-    }
-
-    // Vérification pour la date limite des participations (supérieure à la date actuelle)
-    if (dateLimite && dateLimite <= new Date()) {
-      newErrors.dateLimite =
-        "La date limite des participations doit être supérieure à la date actuelle.";
-    }
-
-    // Mise à jour des erreurs
-    setErrors(newErrors);
-
-    // Vérification finale avant soumission
-    if (Object.keys(newErrors).length === 0) {
-      // Soumission du formulaire ou autre action
-      setIsSubmitting(true);
-
-      // Redirection vers la page de résumé
-    }
-  };
-*/
   return (
     <div>
       <div className="formulaire-cagnotte">
@@ -132,25 +124,31 @@ const FormulaireCagnotte = () => {
               type="text"
               id="nom-cagnotte"
               value={nomCagnotte}
-              onChange={(e) => setNomCagnotte(e.target.value)}
+              onChange={handleChangeNomCagnotte}
             />
+            {nomCagnotteError && (
+              <p className="error-message">{nomCagnotteError}</p>
+            )}
           </li>
 
           <li>
             <label htmlFor="objectif-initial">
-              Objectif initial de la cagnotte
+              Objectif initial de la cagnotte (XOF)
             </label>
             <input
               type="text"
               id="objectif-initial"
               value={objectifInitial}
-              onChange={(e) => setObjectifInitial(e.target.value)}
+              onChange={handleChangeObjectifInitial}
             />
+            {objectifInitialError && (
+              <p className="error-message">{objectifInitialError}</p>
+            )}
           </li>
 
           <li>
             <label htmlFor="don-suggere">
-              Don suggéré
+              Don suggéré (XOF)
               <span className="infoBulle" title="Don suggéré par participant">
                 <span className="infoBulle-circle"></span>
                 <span className="infoBulle-icon">?</span>
@@ -160,8 +158,11 @@ const FormulaireCagnotte = () => {
               type="text"
               id="don-suggere"
               value={donSuggere}
-              onChange={(e) => setDonSuggere(e.target.value)}
+              onChange={handleChangeDonSuggere}
             />
+            {donSuggereError && (
+              <p className="error-message">{donSuggereError}</p>
+            )}
           </li>
 
           <li>
@@ -175,15 +176,15 @@ const FormulaireCagnotte = () => {
                 <span className="infoBulle-icon">?</span>
               </span>
             </label>
-            <li>
-              <DatePicker
-                selected={dateLimite}
-                onChange={(date) => setDateLimite(date)}
-                dateFormat="dd/MM/yyyy"
-                placeholderText="Sélectionnez une date"
-                locale="fr"
-              />
-            </li>
+          </li>
+          <li>
+            <DatePicker
+              selected={dateLimite ? new Date(dateLimite) : null}
+              onChange={(date) => setDateLimite(date)}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="Sélectionnez une date"
+              locale="fr"
+            />
           </li>
 
           <li>
@@ -272,7 +273,11 @@ const FormulaireCagnotte = () => {
             />
           </li>
         </ul>
-        <button type="submit" onClick={handleOuvrirCagnotte}>
+        <button
+          type="submit"
+          onClick={handleOuvrirCagnotte}
+          disabled={!isFormValid}
+        >
           Ouvrir une cagnotte
         </button>
       </div>
