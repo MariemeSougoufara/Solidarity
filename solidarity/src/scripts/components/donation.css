@@ -1,0 +1,49 @@
+.donation{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(
+      45deg,
+      rgba(233, 233, 116, 0.4),
+      rgba(255, 255, 0, 0.2)
+    ),
+     url("../../../image1.jpg");
+    background-size: cover;
+    background-position: center;
+  }
+  form{
+    background-color: white;
+    padding: 0px 60px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centre les éléments horizontalement */
+    justify-content: center; /* Centre les éléments verticalement */
+    text-align: center;
+  }
+  h2{
+    color: rgb(79, 79, 4);
+    text-align: center;
+  }
+  button{
+    width: 40%;
+    height: 50px;
+    padding: 8px;
+    border: none;
+    background-color: rgb(161, 126, 10);
+    color: rgb(246, 242, 242);
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    margin-bottom: 30px;
+    align-self: center;
+  }
+  span{
+    color: rgb(8, 117, 8);
+    font-weight: bold;
+  }
+  
+  
