@@ -1,0 +1,54 @@
+.head {
+    padding: 20px 0;
+    color: #fff;
+}
+
+header {
+    background-color: rgba(254, 236, 236, 0.2);
+    margin: 0 30px;
+}
+
+header li {
+    margin-right: 40px;
+}
+
+header ul {
+    padding: 30px 20px;
+}
+
+
+
+header ul li a {
+    color: #fff;
+    font-weight: 500;
+    transition: 0.5s;
+}
+
+header ul li a:hover {
+    color: #cdc661;
+}
+
+.start {
+    background-color: rgb(212, 192, 9);
+    padding: 0%;
+    color: #0a0101;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style-type: none;
+}
+
+.toggle {
+    display: none;
+}
+
+@media screen and (max-width:768px) {
+    .start {
+        clip-path: none;
+    }
+
+}
