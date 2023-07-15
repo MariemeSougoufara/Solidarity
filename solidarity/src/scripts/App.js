@@ -1,25 +1,16 @@
-import logo from '../assets/logo.svg';
-import '../styles/App.css';
+// Composant principal de notre application
+// qui peut contenir des éléments communs à toutes les pages
 
-function App() {
+import React from 'react';
+import Navbar from '../components/Navbar';
+
+const App = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar />
+      {/* Autres éléments communs à toutes les pages */}
     </div>
   );
-}
+};
 
 export default App;
